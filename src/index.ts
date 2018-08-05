@@ -4,8 +4,14 @@ class AsyncManagerPromise<OutputType, Id = any> {
   protected manager = new AsyncManager<OutputType, Id>()
 
   getPromise(id: Id) {
-    const promise = new Promise<OutputType>(async (resolve) => {
-      this.manager.add(id, resolve)
+    const promise = new Promise<OutputType>(async (resolve, reject) => {
+      this.manager.add(id, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
     })
 
     return promise

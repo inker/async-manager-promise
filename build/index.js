@@ -4,8 +4,15 @@ class AsyncManagerPromise {
         this.manager = new AsyncManager();
     }
     getPromise(id) {
-        const promise = new Promise(async (resolve) => {
-            this.manager.add(id, resolve);
+        const promise = new Promise(async (resolve, reject) => {
+            this.manager.add(id, (err, data) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve(data);
+                }
+            });
         });
         return promise;
     }
